@@ -9,16 +9,31 @@ import lombok.Setter;
 @Getter @Setter
 public class Frame {
 	private Integer score;
-	private Integer firstRoll;
-	private Integer secondRoll;
-	private Integer thirdRoll;
+	private String firstRoll;
+	private String secondRoll;
+	private String thirdRoll;
 	
 	@Builder
-	public Frame(Integer score, Integer firstRoll, Integer secondRoll, Integer thirdRoll) {
+	public Frame(Integer score, String firstRoll, String secondRoll, String thirdRoll) {
 		super();
 		this.score = score;
 		this.firstRoll = firstRoll;
 		this.secondRoll = secondRoll;
 		this.thirdRoll = thirdRoll;
+	}
+	
+	public Integer getSumFirstSecondRolls() {
+		Integer first = 0;
+		Integer second = 0;
+		if(secondRoll.equalsIgnoreCase("x")) {
+			return 10;
+		}
+		if(!secondRoll.equalsIgnoreCase("f")) {
+			second = Integer.valueOf(secondRoll);
+		}
+		if(!firstRoll.equalsIgnoreCase("f")) {
+			first = Integer.valueOf(firstRoll);
+		}
+		return first + second;
 	}
 }
