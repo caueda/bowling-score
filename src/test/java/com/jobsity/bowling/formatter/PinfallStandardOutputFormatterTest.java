@@ -43,7 +43,7 @@ class PinfallStandardOutputFormatterTest {
 				.thirdRoll(STRIKE_MARK)
 				.build();
 		String formattedScore = PinfallStandardOutputFormatter.print(firstFrame);
-		assertThat(formattedScore, equalTo(STRIKE_MARK + BLANK_MARK + STRIKE_MARK + BLANK_MARK + STRIKE_MARK));
+		assertThat(formattedScore, equalTo(STRIKE_MARK + BLANK_MARK + STRIKE_MARK + BLANK_MARK + STRIKE_MARK + BREAK_LINE_MARK));
 	}
 	
 	@Test
@@ -56,7 +56,7 @@ class PinfallStandardOutputFormatterTest {
 				.thirdRoll(STRIKE_MARK)
 				.build();
 		String formattedScore = PinfallStandardOutputFormatter.print(firstFrame);
-		assertThat(formattedScore, equalTo("9" + BLANK_MARK + SPARE_MARK + BLANK_MARK + STRIKE_MARK));
+		assertThat(formattedScore, equalTo("9" + BLANK_MARK + SPARE_MARK + BLANK_MARK + STRIKE_MARK + BREAK_LINE_MARK));
 	}
 	
 	@Test
@@ -68,6 +68,6 @@ class PinfallStandardOutputFormatterTest {
 				.secondRoll("2")
 				.build();
 		String formattedScore = PinfallStandardOutputFormatter.print(firstFrame);
-		assertThat(formattedScore, equalTo("7" + BLANK_MARK + "2"));
+		assertThat(formattedScore, equalTo("7" + BLANK_MARK + "2" + BREAK_LINE_MARK));
 	}
 }
