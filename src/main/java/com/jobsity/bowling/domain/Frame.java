@@ -16,27 +16,14 @@ public class Frame {
 	private Frame previous;
 	
 	@Builder
-	public Frame(Integer score, String firstRoll, String secondRoll, String thirdRoll) {
+	public Frame(Integer score, String firstRoll, String secondRoll, String thirdRoll, Integer index, Frame previous) {
 		super();
 		this.score = score;
 		this.firstRoll = firstRoll;
 		this.secondRoll = secondRoll;
 		this.thirdRoll = thirdRoll;
-	}
-	
-	public Integer getSumFirstSecondRolls() {
-		Integer first = 0;
-		Integer second = 0;
-		if(secondRoll.equalsIgnoreCase("x")) {
-			return 10;
-		}
-		if(!secondRoll.equalsIgnoreCase("f")) {
-			second = Integer.valueOf(secondRoll);
-		}
-		if(!firstRoll.equalsIgnoreCase("f")) {
-			first = Integer.valueOf(firstRoll);
-		}
-		return first + second;
+		this.index = index;
+		this.previous = previous;
 	}
 	
 	public Integer getScorePreviousFrame() {

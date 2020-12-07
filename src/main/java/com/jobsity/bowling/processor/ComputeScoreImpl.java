@@ -2,35 +2,23 @@ package com.jobsity.bowling.processor;
 
 import java.util.List;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.jobsity.bowling.domain.BowlingGamePlayerScore;
-import com.jobsity.bowling.domain.BowlingScore;
 import com.jobsity.bowling.domain.Frame;
 import com.jobsity.bowling.exception.InvalidScoreOrIncorrectFormatException;
+import com.jobsity.bowling.util.BowlingConstantes;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Component
-public class ComputeScoreImpl implements ComputeScore {
-	
-	private static final String BLANK_MARK = " ";
-	private static final String SPARE_MARK = "/";
-	private static final String STRIKE_MARK = "X";
-	private static final String FOUL_MARK = "F";
-	private static final int LAST_FRAME_PER_GAME_INDEX = 9;
-	private static final int STRIKE = 10;
+@Scope("prototype")
+public class ComputeScoreImpl implements ComputeScore, BowlingConstantes {
 	
 	@Override
-	public void compute(BowlingScore bowlingScore) {
-		bowlingScore.values().forEach(bowlingGamePlayerScore -> {
-			try {
-				computeScoreGameForPlayer(bowlingGamePlayerScore);
-			} catch (InvalidScoreOrIncorrectFormatException e) {
-				bowlingGamePlayerScore.setStatusMessage(e.getMessage());
-			}
-		});
-	}
-
-	public void computeScoreGameForPlayer(BowlingGamePlayerScore bowlingGamePlayerScore) {
+	public void compute(BowlingGamePlayerScore bowlingGamePlayerScore) {
 		int countFrameGame = 0;
 		int countRoll = 0;
 		
@@ -64,7 +52,11 @@ public class ComputeScoreImpl implements ComputeScore {
 					countRoll=0;
 					countFrameGame++;
 				} else if(knockedPins < STRIKE && isFirstRoll(countRoll)) {
-					currentFrame.setFirstRoll(knockedPins.toString());
+					if(isFoulRoll(rolls, indexCurrentRoll, knockedPins)) {
+						currentFrame.setFirstRoll(FOUL_MARK);
+					} else {
+						currentFrame.setFirstRoll(knockedPins.toString());
+					}
 					countRoll++;
 				} else if(isSecondRoll(countRoll) && countFrameGame != LAST_FRAME_PER_GAME_INDEX) {
 					computeSecondRoll(rolls, indexCurrentRoll, currentFrame);
@@ -75,9 +67,14 @@ public class ComputeScoreImpl implements ComputeScore {
 			}
 			
 			whenThereAreLessThanTenFramesThrowInvalidScoreOrIncorrectFormatException(bowlingGamePlayerScore.getGameFrames().get(LAST_FRAME_PER_GAME_INDEX));
-		} catch (IndexOutOfBoundsException e) {
-			throw new InvalidScoreOrIncorrectFormatException();
+		} catch (Exception e) {
+			log.error(e.getMessage());
+			bowlingGamePlayerScore.setStatusMessage(InvalidScoreOrIncorrectFormatException.INVALID_SCORE_VALUE_OR_INCORRECT_FORMAT);
 		}
+	}
+
+	public boolean isFoulRoll(List<String> rolls, int indexCurrentRoll, Integer knockedPins) {
+		return knockedPins == 0 && rolls.get(indexCurrentRoll).equalsIgnoreCase(FOUL_MARK);
 	}
 
 	public void ifThereAreMoreThanThreeRollsInTheLastFrameWithStrikeOrSpareThrowException(List<String> rolls,
@@ -106,14 +103,18 @@ public class ComputeScoreImpl implements ComputeScore {
 	}
 
 	public void computeSecondRoll(List<String> rolls, int currentRollIndex, Frame currentFrame) {
-		Integer firstRoll = Integer.valueOf(currentFrame.getFirstRoll());
+		Integer firstRoll = getKnockedPins(currentFrame.getFirstRoll());
 		Integer knockedPins = getKnockedPins(rolls.get(currentRollIndex));
 		Integer sumFirstSecondRoll = getSumFirstWithSecondRoll(knockedPins, firstRoll);
 		if(sumFirstSecondRoll == STRIKE) {
 			currentFrame.setSecondRoll(SPARE_MARK);
 			currentFrame.setScore(sumFirstSecondRoll + getNextRoll(rolls, currentRollIndex));
 		} else {
-			currentFrame.setSecondRoll(knockedPins.toString());
+			if(isFoulRoll(rolls, currentRollIndex, knockedPins)) {
+				currentFrame.setSecondRoll(FOUL_MARK);
+			} else {
+				currentFrame.setSecondRoll(knockedPins.toString());
+			}
 			currentFrame.setScore(sumFirstSecondRoll);
 		}
 	}

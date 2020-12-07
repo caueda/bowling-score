@@ -14,10 +14,10 @@ import org.junit.jupiter.api.Test;
 import com.jobsity.bowling.domain.BowlingGamePlayerScore;
 import com.jobsity.bowling.domain.Frame;
 import com.jobsity.bowling.exception.InvalidScoreOrIncorrectFormatException;
+import static com.jobsity.bowling.util.BowlingConstantes.*;
 
 class ComputeScoreImplTest {
 	
-	private static final int ALL_PINS_KNOCKED = 10;
 	private static final int FIRST_ROLL = 0;
 	private static final List<String> ROLLS_SAMPLE =
 			Lists.newArrayList(
@@ -119,7 +119,7 @@ class ComputeScoreImplTest {
 		ComputeScoreImpl computeScoreImpl = new ComputeScoreImpl();
 		BowlingGamePlayerScore bowlingGamePlayerScore = new BowlingGamePlayerScore();
 		bowlingGamePlayerScore.setRolls(ROLLS_SAMPLE_FOUL_GAME);
-		computeScoreImpl.computeScoreGameForPlayer(bowlingGamePlayerScore);
+		computeScoreImpl.compute(bowlingGamePlayerScore);
 		assertThat(bowlingGamePlayerScore.getGameFrames().get(9).getScore(), equalTo(0));
 	}
 	
@@ -128,7 +128,7 @@ class ComputeScoreImplTest {
 		ComputeScoreImpl computeScoreImpl = new ComputeScoreImpl();
 		BowlingGamePlayerScore bowlingGamePlayerScore = new BowlingGamePlayerScore();
 		bowlingGamePlayerScore.setRolls(ROLLS_SAMPLE_PERFECT_GAME);
-		computeScoreImpl.computeScoreGameForPlayer(bowlingGamePlayerScore);
+		computeScoreImpl.compute(bowlingGamePlayerScore);
 		assertThat(bowlingGamePlayerScore.getGameFrames().get(9).getScore(), equalTo(300));
 	}
 	
@@ -137,7 +137,7 @@ class ComputeScoreImplTest {
 		ComputeScoreImpl computeScoreImpl = new ComputeScoreImpl();
 		BowlingGamePlayerScore bowlingGamePlayerScore = new BowlingGamePlayerScore();
 		bowlingGamePlayerScore.setRolls(ROLLS_SAMPLE_YOUTUBE_TUTORIAL);
-		computeScoreImpl.computeScoreGameForPlayer(bowlingGamePlayerScore);
+		computeScoreImpl.compute(bowlingGamePlayerScore);
 		assertThat(bowlingGamePlayerScore.getGameFrames().get(9).getScore(), equalTo(170));
 	}
 
@@ -172,11 +172,9 @@ class ComputeScoreImplTest {
 	@Test
 	void testGetKnockedPins_whenNegativeInput_shouldThrowIllegalArgumentException() {
 		ComputeScoreImpl computeScoreImpl = new ComputeScoreImpl();
-		Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+		assertThrows(InvalidScoreOrIncorrectFormatException.class, () -> {
 			computeScoreImpl.getKnockedPins("-1");
 		});
-		assertTrue(exception.getMessage()
-				.contains(InvalidScoreOrIncorrectFormatException.INVALID_SCORE_VALUE_OR_INCORRECT_FORMAT));
 	}
 	
 	@Test
@@ -202,13 +200,13 @@ class ComputeScoreImplTest {
 	@Test
 	void isStrike_whenAllPinsWereKnocked_ThenReturnTrue() {
 		ComputeScoreImpl computeScoreImpl = new ComputeScoreImpl();
-		assertTrue(computeScoreImpl.isStrike(FIRST_ROLL, ALL_PINS_KNOCKED));
+		assertTrue(computeScoreImpl.isStrike(FIRST_ROLL, STRIKE));
 	}
 	
 	@Test
 	void isStrike_whenNotAllPinsWereKnocked_ThenReturnFalse() {
 		ComputeScoreImpl computeScoreImpl = new ComputeScoreImpl();
-		assertFalse(computeScoreImpl.isStrike(FIRST_ROLL, ALL_PINS_KNOCKED-1));
+		assertFalse(computeScoreImpl.isStrike(FIRST_ROLL, STRIKE-1));
 	}
 	
 	@Test
@@ -224,11 +222,9 @@ class ComputeScoreImplTest {
 		ComputeScoreImpl computeScoreImpl = new ComputeScoreImpl();
 		int knockedPinsFirstRoll = 6;
 		int knockedPinsSecondRoll = 5;
-		Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+		assertThrows(InvalidScoreOrIncorrectFormatException.class, () -> {
 			computeScoreImpl.getSumFirstWithSecondRoll(knockedPinsFirstRoll,  knockedPinsSecondRoll);
 		});
-		assertTrue(exception.getMessage()
-				.contains(InvalidScoreOrIncorrectFormatException.INVALID_SCORE_VALUE_OR_INCORRECT_FORMAT));
 	}
 	
 	@Test
@@ -245,33 +241,29 @@ class ComputeScoreImplTest {
 	@Test
 	void isStrike_WhenAllPinsWereKnockedInFirstRoll_ThenReturnTrue() {
 		ComputeScoreImpl computeScoreImpl = new ComputeScoreImpl();
-		assertTrue(computeScoreImpl.isStrike(FIRST_ROLL, ALL_PINS_KNOCKED));
+		assertTrue(computeScoreImpl.isStrike(FIRST_ROLL, STRIKE));
 	}
 	
 	@Test
 	void isStrike_WhenAllPinsWereNotKnockedInFirstRoll_ThenReturnFalse() {
 		ComputeScoreImpl computeScoreImpl = new ComputeScoreImpl();
-		assertFalse(computeScoreImpl.isStrike(FIRST_ROLL, ALL_PINS_KNOCKED-1));
+		assertFalse(computeScoreImpl.isStrike(FIRST_ROLL, STRIKE-1));
 	}
 	
 	@Test
 	void testIfThereAreMoreThanThreeRollsInTheLastFrameWithStrikeOrSpareThrowException_whehStrike() {
 		ComputeScoreImpl computeScoreImpl = new ComputeScoreImpl();
-		Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+		assertThrows(InvalidScoreOrIncorrectFormatException.class, () -> {
 			computeScoreImpl.ifThereAreMoreThanThreeRollsInTheLastFrameWithStrikeOrSpareThrowException(ROLLS_SAMPLE_GIVES_MORE_THAN_TEN_FRAMES_WITH_LAST_STRIKE, 18);
 		});
-		assertTrue(exception.getMessage()
-				.contains(InvalidScoreOrIncorrectFormatException.INVALID_SCORE_VALUE_OR_INCORRECT_FORMAT));
 	}
 	
 	@Test
 	void testIfThereAreMoreThanThreeRollsInTheLastFrameWithStrikeOrSpareThrowException_whehSpare() {
 		ComputeScoreImpl computeScoreImpl = new ComputeScoreImpl();
-		Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+		assertThrows(InvalidScoreOrIncorrectFormatException.class, () -> {
 			computeScoreImpl.ifThereAreMoreThanThreeRollsInTheLastFrameWithStrikeOrSpareThrowException(ROLLS_SAMPLE_GIVES_MORE_THAN_TEN_FRAMES_WITH_LAST_SPARE, 18);
 		});
-		assertTrue(exception.getMessage()
-				.contains(InvalidScoreOrIncorrectFormatException.INVALID_SCORE_VALUE_OR_INCORRECT_FORMAT));
 	}
 	
 	@Test
@@ -279,12 +271,8 @@ class ComputeScoreImplTest {
 		ComputeScoreImpl computeScoreImpl = new ComputeScoreImpl();
 		BowlingGamePlayerScore bowlingGamePlayerScore = new BowlingGamePlayerScore();
 		bowlingGamePlayerScore.setRolls(ROLLS_SAMPLE_INCOMPLETE_FRAMES_GAME);
-		
-		Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-			computeScoreImpl.computeScoreGameForPlayer(bowlingGamePlayerScore);
-		});
-		assertTrue(exception.getMessage()
-				.contains(InvalidScoreOrIncorrectFormatException.INVALID_SCORE_VALUE_OR_INCORRECT_FORMAT));
+		computeScoreImpl.compute(bowlingGamePlayerScore);
+		assertThat(bowlingGamePlayerScore.getStatusMessage(), equalTo(InvalidScoreOrIncorrectFormatException.INVALID_SCORE_VALUE_OR_INCORRECT_FORMAT));
 	}
 	
 }

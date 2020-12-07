@@ -1,7 +1,7 @@
 package com.jobsity.bowling.processor;
 
-import com.jobsity.bowling.domain.BowlingScore;
+import com.jobsity.bowling.domain.BowlingGamePlayerScore;
 
 public interface ComputeScore {
-	void compute(final BowlingScore bowlingScore);
+	void compute(final BowlingGamePlayerScore bowlingGamePlayerScore);
 }
