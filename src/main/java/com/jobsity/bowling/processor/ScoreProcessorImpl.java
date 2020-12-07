@@ -18,7 +18,9 @@ public class ScoreProcessorImpl implements ScoreProcessor {
 	@Override
 	public BowlingScore process(List<String> listOfPlayersAndRolls) {
 		BowlingScore bowlingScore = getInstanceOfBowlingScoreWithPlayersAndTheirRolls(listOfPlayersAndRolls);
-		computeScore.compute(bowlingScore);
+		
+		bowlingScore.values().forEach(computeScore::compute);
+		
 		return bowlingScore;
 	}
 	

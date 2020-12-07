@@ -10,10 +10,10 @@ import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 
 import com.jobsity.bowling.domain.BowlingScore;
+import static com.jobsity.bowling.util.BowlingConstantes.*;
 
 class ScoreProcessorImplTest {
 	
-	private static final String NUMBER_OF_KNOCKED_PINS_10_OF_ROW_SAMPLE = "10";
 	private static final String PLAYER_NAME_JEFF_OF_ROW_SAMPLE = "Jeff";
 	private static final String ROW_SAMPLE = "Jeff 10";
 	private static final List<String> LIST_OF_PLAYERS_AND_THEIR_ROLLS = Lists.newArrayList("Jeff 10",	"John 3",	"John 7",	"Jeff 7",	"Jeff 3",	"John 6",	"John 3");
@@ -42,7 +42,7 @@ class ScoreProcessorImplTest {
 	void testGetKnockedPinsFromArrayWithPlayerNameAndknockedPins() {
 		ScoreProcessorImpl scoreProcessor = new ScoreProcessorImpl(new ComputeScoreImpl());
 		String[] arrayWithPlayerNameAndknockedPins = scoreProcessor.getArrayWithPlayerNameAndknockedPins(ROW_SAMPLE);
-		assertThat("Pins knocked", scoreProcessor.getKnockedPinsFromArrayWithPlayerNameAndknockedPins(arrayWithPlayerNameAndknockedPins), equalTo(NUMBER_OF_KNOCKED_PINS_10_OF_ROW_SAMPLE));
+		assertThat("Pins knocked", scoreProcessor.getKnockedPinsFromArrayWithPlayerNameAndknockedPins(arrayWithPlayerNameAndknockedPins), equalTo(String.valueOf(STRIKE)));
 	}
 
 }

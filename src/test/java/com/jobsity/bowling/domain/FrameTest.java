@@ -5,51 +5,30 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.junit.jupiter.api.Test;
 
+import static com.jobsity.bowling.util.BowlingConstantes.*;
+
 class FrameTest {
-
-	private static final int ALL_PINS_KNOCKED = 10;
-
+	
 	@Test
-	void testGetSumFirstSecondRolls_whenOccurStrike() {
+	void testGetScorePreviousFrame_WhenThereIsNoPrevious_ShouldReturnZero() {
 		Frame frame = Frame.builder()
-				.secondRoll("X")
+				.index(0)
 				.build();
-		assertThat(frame.getSumFirstSecondRolls(), equalTo(ALL_PINS_KNOCKED));
+		assertThat(frame.getScorePreviousFrame(), equalTo(0));
 	}
 	
 	@Test
-	void testGetSumFirstSecondRolls_whenOccurSpare() {
-		Frame frame = Frame.builder()
-				.firstRoll("5")
-				.secondRoll("5")
+	void testGetScorePreviousFrame_WhenThereIsPrevious10_ShouldReturn10() {
+		Frame previousFrame = Frame
+				.builder()
+				.index(0)
+				.score(MAX_TOTAL_SCORE)
 				.build();
-		assertThat(frame.getSumFirstSecondRolls(), equalTo(ALL_PINS_KNOCKED));
-	}
-	
-	@Test
-	void testGetSumFirstSecondRolls_when9PinsWereKnocked() {
 		Frame frame = Frame.builder()
-				.firstRoll("5")
-				.secondRoll("4")
+				.index(1)
+				.score(9)
+				.previous(previousFrame)
 				.build();
-		assertThat(frame.getSumFirstSecondRolls(), equalTo(9));
-	}
-	
-	@Test
-	void testGetSumFirstSecondRolls_whenSecondRollWereFoul() {
-		Frame frame = Frame.builder()
-				.firstRoll("5")
-				.secondRoll("F")
-				.build();
-		assertThat(frame.getSumFirstSecondRolls(), equalTo(5));
-	}
-	
-	@Test
-	void testGetSumFirstSecondRolls_whenTwoRollsWereFoul() {
-		Frame frame = Frame.builder()
-				.firstRoll("F")
-				.secondRoll("F")
-				.build();
-		assertThat(frame.getSumFirstSecondRolls(), equalTo(0));
+		assertThat(frame.getScorePreviousFrame(), equalTo(MAX_TOTAL_SCORE));
 	}
 }
