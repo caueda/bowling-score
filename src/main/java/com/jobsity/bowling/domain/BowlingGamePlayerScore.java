@@ -13,10 +13,16 @@ public class BowlingGamePlayerScore {
 	
 	private List<String> rolls = new LinkedList<>();
 	private List<Frame> gameFrames = new ArrayList<>(TOTAL_FRAMES);
+	private String statusMessage;
 	
 	public BowlingGamePlayerScore() {
+		Frame previous = null;
 		for(int frame=0; frame<TOTAL_FRAMES; frame++) {
-			gameFrames.add(new Frame());
+			Frame newFrame = new Frame();
+			newFrame.setIndex(frame);
+			newFrame.setPrevious(previous);
+			gameFrames.add(newFrame);
+			previous = newFrame;
 		}
 	}
 }

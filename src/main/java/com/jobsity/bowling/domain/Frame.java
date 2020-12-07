@@ -8,10 +8,12 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter @Setter
 public class Frame {
-	private Integer score;
+	private Integer index;
+	private Integer score = 0;
 	private String firstRoll;
 	private String secondRoll;
 	private String thirdRoll;
+	private Frame previous;
 	
 	@Builder
 	public Frame(Integer score, String firstRoll, String secondRoll, String thirdRoll) {
@@ -35,5 +37,12 @@ public class Frame {
 			first = Integer.valueOf(firstRoll);
 		}
 		return first + second;
+	}
+	
+	public Integer getScorePreviousFrame() {
+		if(getPrevious() == null) {
+			return 0;
+		} 
+		return getPrevious().getScore();
 	}
 }
