@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class BowlingGameInputReaderFile implements BowlingGameInputReader {
 
+	private static final String TAB_SEPARATOR = "\t";
 	private String filePath;
 	
 	public BowlingGameInputReaderFile(String filePath) {
@@ -39,7 +40,7 @@ public class BowlingGameInputReaderFile implements BowlingGameInputReader {
 	public List<String> parseReturnedLinesBreakingByTabCharacter(List<String> rowsSeparatedByTab) {
 		if(rowsSeparatedByTab != null && !rowsSeparatedByTab.isEmpty()) {
 			String rowSeparatedByTab = rowsSeparatedByTab.get(0);
-			String[] splitedByTabArray = rowSeparatedByTab.split("\t");
+			String[] splitedByTabArray = rowSeparatedByTab.split(TAB_SEPARATOR);
 			LinkedList<String> gameRows = new LinkedList<>();
 			for(int i=0; i<splitedByTabArray.length; i++) {
 				gameRows.add(splitedByTabArray[i]);
