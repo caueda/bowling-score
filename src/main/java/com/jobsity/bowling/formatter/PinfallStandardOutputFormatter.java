@@ -9,15 +9,15 @@ public class PinfallStandardOutputFormatter {
 		StringBuilder formatter = new StringBuilder();
 		if(frame.getIndex() < 9) {
 			if(frame.getSecondRoll().equalsIgnoreCase(STRIKE_MARK)) {
-				formatter.append(BLANK_MARK).append(STRIKE_MARK).append(BLANK_MARK);
+				formatter.append(TAB_SEPARATOR).append(STRIKE_MARK).append(TAB_SEPARATOR);
 			} else {
-				formatter.append(frame.getFirstRoll()).append(BLANK_MARK).append(frame.getSecondRoll()).append(BLANK_MARK);
+				formatter.append(frame.getFirstRoll()).append(TAB_SEPARATOR).append(frame.getSecondRoll()).append(TAB_SEPARATOR);
 			}
 		} else {
 			if(frame.getFirstRoll().equalsIgnoreCase(STRIKE_MARK) || frame.getSecondRoll().equals(SPARE_MARK)) {
-				formatter.append(frame.getFirstRoll()).append(BLANK_MARK).append(frame.getSecondRoll()).append(BLANK_MARK).append(frame.getThirdRoll());
+				formatter.append(frame.getFirstRoll()).append(TAB_SEPARATOR).append(frame.getSecondRoll()).append(TAB_SEPARATOR).append(frame.getThirdRoll());
 			} else {
-				formatter.append(frame.getFirstRoll()).append(BLANK_MARK).append(frame.getSecondRoll());
+				formatter.append(frame.getFirstRoll()).append(TAB_SEPARATOR).append(frame.getSecondRoll());
 			}
 			formatter.append(BREAK_LINE_MARK);
 		}
