@@ -18,7 +18,7 @@ class ScoreStandardOutputFormatterTest {
 				.score(STRIKE)
 				.build();
 		String formattedScore = ScoreStandardOutputFormatter.print(firstFrame);
-		assertThat("Must have a blank character at the end", formattedScore, equalTo(STRIKE + BLANK_MARK + BLANK_MARK));
+		assertThat("Must have a blank character at the end", formattedScore, equalTo(STRIKE + TAB_SEPARATOR + TAB_SEPARATOR));
 	}
 	@Test
 	void testPrint_WhenFrameIsLast_ShoudReturnScoreWithoutEndingBlank() {
