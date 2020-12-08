@@ -11,17 +11,4 @@ public class InvalidScoreOrIncorrectFormatException extends IllegalArgumentExcep
 	public InvalidScoreOrIncorrectFormatException() {
 		super(INVALID_SCORE_VALUE_OR_INCORRECT_FORMAT);
 	}
-
-	public InvalidScoreOrIncorrectFormatException(String message, Throwable cause) {
-		super(message, cause);
-	}
-
-	public InvalidScoreOrIncorrectFormatException(String s) {
-		super(s);
-	}
-
-	public InvalidScoreOrIncorrectFormatException(Throwable cause) {
-		super(cause);
-	}
-
 }

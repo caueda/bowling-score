@@ -8,7 +8,6 @@ public class ScoreStandardOutputFormatter {
 		StringBuilder formattedScore = new StringBuilder();
 		formattedScore.append(frame.getScore().toString());
 		formattedScore.append((frame.getIndex() < LAST_FRAME_PER_GAME_INDEX) ? BLANK_MARK + BLANK_MARK: BREAK_LINE_MARK);
-		System.out.print(formattedScore.toString());
 		return formattedScore.toString();
 	}
 }

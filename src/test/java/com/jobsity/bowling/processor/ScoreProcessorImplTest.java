@@ -2,7 +2,7 @@ package com.jobsity.bowling.processor;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.*;
 
 import java.util.List;
 
@@ -28,7 +28,7 @@ class ScoreProcessorImplTest {
 	void testGetArrayWithPlayerNameAndknockedPins() {
 		ScoreProcessorImpl scoreProcessor = new ScoreProcessorImpl(new ComputeScoreImpl());
 		String[] arrayWithPlayerNameAndknockedPins = scoreProcessor.getArrayWithPlayerNameAndknockedPins(ROW_SAMPLE);
-		assertThat("Must have two elements, the name and pins", arrayWithPlayerNameAndknockedPins.length, equalTo(2));
+		assertThat("Must have two elements, the name and pins", arrayWithPlayerNameAndknockedPins, arrayWithSize(2));
 	}
 
 	@Test
