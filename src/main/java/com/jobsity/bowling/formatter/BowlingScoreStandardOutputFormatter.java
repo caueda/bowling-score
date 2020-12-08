@@ -34,7 +34,7 @@ public class BowlingScoreStandardOutputFormatter {
 	}
 
 	public static String printScoreTitle() {
-		String scoreTitle = "Score" + BLANK_MARK + BLANK_MARK;
+		String scoreTitle = "Score" + TAB_SEPARATOR + TAB_SEPARATOR;
 		return scoreTitle;
 	}
 
@@ -44,15 +44,15 @@ public class BowlingScoreStandardOutputFormatter {
 	}
 
 	public static String printPinfallsTitle() {
-		String pinFallsTitle = "Pinfalls" + BLANK_MARK + BLANK_MARK;
+		String pinFallsTitle = "Pinfalls" + TAB_SEPARATOR;
 		return pinFallsTitle;
 	}
 	
 	public static String printFrame() {
 		StringBuilder frameTitle = new StringBuilder();
-		frameTitle.append("Frame" + BLANK_MARK + BLANK_MARK);
+		frameTitle.append("Frame" + TAB_SEPARATOR + TAB_SEPARATOR);
 		for(int frame=1; frame<=10; frame++) {
-			frameTitle.append(frame).append((frame!=10) ? BLANK_MARK + BLANK_MARK : BREAK_LINE_MARK);
+			frameTitle.append(frame).append((frame!=10) ? TAB_SEPARATOR + TAB_SEPARATOR : BREAK_LINE_MARK);
 		}
 		return frameTitle.toString();
 	}
