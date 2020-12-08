@@ -17,9 +17,11 @@ class BowlingApplicationTestsIT {
 	
 	private static final String TEST_CASES_INPUT02_TXT = "test_cases/input02.txt";
 	
-	private static final String TEST_CASES_INPUT03_TXT = "test_cases/input03.txt";
+	private static final String TEST_CASES_INPUT03_INCORRECT_DATA_11PINS_TXT = "test_cases/input03.txt";
 	
 	private static final String TEST_CASES_INPUT04_TXT = "test_cases/input04.txt";
+	
+	private static final String TEST_CASES_INPUT05_TXT = "test_cases/input05.txt";
 	
 	private static final String OUTPUT_TEST_CASES_INPUT01_TXT = 
 			"Frame		1		2		3		4		5		6		7		8		9		10\n" + 
@@ -39,7 +41,7 @@ class BowlingApplicationTestsIT {
 			"Pinfalls	F	F	F	0	F	F	F	F	F	F	F	F	F	F	F	F	F	F	F	F\n" + 
 			"Score		0		0		0		0		0		0		0		0		0		0\n";
 	
-	private static final String SUBSTR_OUTPUT_TEST_CASES_INPUT03_JEFFS_INCORRECT_DATA =
+	private static final String SUBSTR_OUTPUT_TEST_CASES_INPUT03_JEFFS_INCORRECT_DATA_11PINS =
 			"Jeff\n" + 
 			"Pinfalls	Invalid score value or incorrect format.\n" + 
 			"Score		Invalid score value or incorrect format.\n";
@@ -54,6 +56,21 @@ class BowlingApplicationTestsIT {
 			"Score		7		15		20		25		40		46		54		71		78		100\n" + 
 			"Bob\n" + 
 			"Pinfalls	F	F	F	0	F	F	F	F	F	F	F	F	F	F	F	F	F	F	F	F\n" + 
+			"Score		0		0		0		0		0		0		0		0		0		0\n";
+	
+	private static final String OUTPUT_TEST_CASES_INPUT05_TXT =
+			"Frame		1		2		3		4		5		6		7		8		9		10\n" + 
+			"Jeff\n" + 
+			"Pinfalls	Invalid score value or incorrect format.\n" + 
+			"Score		Invalid score value or incorrect format.\n" + 
+			"Lewis\n" + 
+			"Pinfalls	5	2	3	5	5	0	4	1	9	/	5	1	7	1		X	5	2	X	10	2\n" + 
+			"Score		7		15		20		25		40		46		54		71		78		100\n" + 
+			"Bob\n" + 
+			"Pinfalls	F	F	F	0	F	F	F	F	F	F	F	F	F	F	F	F	F	F	F	F\n" + 
+			"Score		0		0		0		0		0		0		0		0		0		0\n" + 
+			"Logan\n" + 
+			"Pinfalls	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0\n" + 
 			"Score		0		0		0		0		0		0		0		0		0		0\n";
 
 	@Autowired
@@ -77,13 +94,19 @@ class BowlingApplicationTestsIT {
 	
 	@Test
 	void GivenInput03WithJeffsIncorrect11PinsKnocked_ThenOutputJeffsDataAsInvalid() {
-		String output = BowlingApplication.execute(bowlingGameService, TEST_CASES_INPUT03_TXT);
-		assertThat(output, containsString(SUBSTR_OUTPUT_TEST_CASES_INPUT03_JEFFS_INCORRECT_DATA));
+		String output = BowlingApplication.execute(bowlingGameService, TEST_CASES_INPUT03_INCORRECT_DATA_11PINS_TXT);
+		assertThat(output, containsString(SUBSTR_OUTPUT_TEST_CASES_INPUT03_JEFFS_INCORRECT_DATA_11PINS));
 	}
 	
 	@Test
 	void GivenInput04_ThenShowOutputForJhonAndJeffAndLewis() {
 		String output = BowlingApplication.execute(bowlingGameService, TEST_CASES_INPUT04_TXT);
 		assertThat(output, equalTo(OUTPUT_TEST_CASES_INPUT04_TXT));
+	}
+	
+	@Test
+	void GivenInput05_WhenPlayerLoganAllRollsZero_ThenShowOutputForJhonAndJeffAndLewisAndLogan() {
+		String output = BowlingApplication.execute(bowlingGameService, TEST_CASES_INPUT05_TXT);
+		assertThat(output, equalTo(OUTPUT_TEST_CASES_INPUT05_TXT));
 	}
 }
