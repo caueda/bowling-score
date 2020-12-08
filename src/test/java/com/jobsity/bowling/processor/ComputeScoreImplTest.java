@@ -120,7 +120,7 @@ class ComputeScoreImplTest {
 		BowlingGamePlayerScore bowlingGamePlayerScore = new BowlingGamePlayerScore();
 		bowlingGamePlayerScore.setRolls(ROLLS_SAMPLE_FOUL_GAME);
 		computeScoreImpl.compute(bowlingGamePlayerScore);
-		assertThat(bowlingGamePlayerScore.getGameFrames().get(9).getScore(), equalTo(0));
+		assertThat(bowlingGamePlayerScore.getGameFrames().get(LAST_FRAME_PER_GAME_INDEX).getScore(), equalTo(0));
 	}
 	
 	@Test
@@ -129,7 +129,7 @@ class ComputeScoreImplTest {
 		BowlingGamePlayerScore bowlingGamePlayerScore = new BowlingGamePlayerScore();
 		bowlingGamePlayerScore.setRolls(ROLLS_SAMPLE_PERFECT_GAME);
 		computeScoreImpl.compute(bowlingGamePlayerScore);
-		assertThat(bowlingGamePlayerScore.getGameFrames().get(9).getScore(), equalTo(300));
+		assertThat(bowlingGamePlayerScore.getGameFrames().get(LAST_FRAME_PER_GAME_INDEX).getScore(), equalTo(MAX_TOTAL_SCORE));
 	}
 	
 	@Test
@@ -138,7 +138,7 @@ class ComputeScoreImplTest {
 		BowlingGamePlayerScore bowlingGamePlayerScore = new BowlingGamePlayerScore();
 		bowlingGamePlayerScore.setRolls(ROLLS_SAMPLE_YOUTUBE_TUTORIAL);
 		computeScoreImpl.compute(bowlingGamePlayerScore);
-		assertThat(bowlingGamePlayerScore.getGameFrames().get(9).getScore(), equalTo(170));
+		assertThat(bowlingGamePlayerScore.getGameFrames().get(LAST_FRAME_PER_GAME_INDEX).getScore(), equalTo(170));
 	}
 
 	@Test
@@ -158,8 +158,8 @@ class ComputeScoreImplTest {
 	@Test
 	void testGetKnockedPins_whenInputX_shouldReturn10() {
 		ComputeScoreImpl computeScoreImpl = new ComputeScoreImpl();
-		assertThat("X uppercase", computeScoreImpl.getKnockedPins("X"), equalTo(10));
-		assertThat("x lowercase", computeScoreImpl.getKnockedPins("x"), equalTo(10));
+		assertThat("X uppercase", computeScoreImpl.getKnockedPins(STRIKE_MARK), equalTo(STRIKE));
+		assertThat("x lowercase", computeScoreImpl.getKnockedPins(STRIKE_MARK), equalTo(STRIKE));
 	}
 	
 	@Test
@@ -180,21 +180,17 @@ class ComputeScoreImplTest {
 	@Test
 	void testGetKnockedPins_whenNoValidInputCharacter_shouldThrowIllegalArgumentException() {
 		ComputeScoreImpl computeScoreImpl = new ComputeScoreImpl();
-		Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+		assertThrows(InvalidScoreOrIncorrectFormatException.class, () -> {
 			computeScoreImpl.getKnockedPins("a");
 		});
-		assertTrue(exception.getMessage()
-				.contains(InvalidScoreOrIncorrectFormatException.INVALID_SCORE_VALUE_OR_INCORRECT_FORMAT));
 	}
 	
 	@Test
 	void testGetKnockedPins_whenValueInputGreaterThan10_shouldThrowIllegalArgumentException() {
 		ComputeScoreImpl computeScoreImpl = new ComputeScoreImpl();
-		Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+		assertThrows(IllegalArgumentException.class, () -> {
 			computeScoreImpl.getKnockedPins("11");
 		});
-		assertTrue(exception.getMessage()
-				.contains(InvalidScoreOrIncorrectFormatException.INVALID_SCORE_VALUE_OR_INCORRECT_FORMAT));
 	}
 	
 	@Test
@@ -251,7 +247,7 @@ class ComputeScoreImplTest {
 	}
 	
 	@Test
-	void testIfThereAreMoreThanThreeRollsInTheLastFrameWithStrikeOrSpareThrowException_whehStrike() {
+	void testIfThereAreMoreThanThreeRollsInTheLastFrame_WhenStrike_ThenThrowInvalidScoreOrIncorrectFormatException() {
 		ComputeScoreImpl computeScoreImpl = new ComputeScoreImpl();
 		assertThrows(InvalidScoreOrIncorrectFormatException.class, () -> {
 			computeScoreImpl.ifThereAreMoreThanThreeRollsInTheLastFrameWithStrikeOrSpareThrowException(ROLLS_SAMPLE_GIVES_MORE_THAN_TEN_FRAMES_WITH_LAST_STRIKE, 18);
@@ -259,7 +255,7 @@ class ComputeScoreImplTest {
 	}
 	
 	@Test
-	void testIfThereAreMoreThanThreeRollsInTheLastFrameWithStrikeOrSpareThrowException_whehSpare() {
+	void testIfThereAreMoreThanThreeRollsInTheLastFrameWithStrikeOrSpareThrowException_whenSpare() {
 		ComputeScoreImpl computeScoreImpl = new ComputeScoreImpl();
 		assertThrows(InvalidScoreOrIncorrectFormatException.class, () -> {
 			computeScoreImpl.ifThereAreMoreThanThreeRollsInTheLastFrameWithStrikeOrSpareThrowException(ROLLS_SAMPLE_GIVES_MORE_THAN_TEN_FRAMES_WITH_LAST_SPARE, 18);
@@ -267,7 +263,16 @@ class ComputeScoreImplTest {
 	}
 	
 	@Test
-	void testWhenThereAreLessThanTenFramesThrowInvalidScoreOrIncorrectFormatException() {
+	void testIfThereAreMoreThanThreeRollsInTheLastFrame_WhenSpare_ThenSetStatusMessageInvalid() {
+		ComputeScoreImpl computeScoreImpl = new ComputeScoreImpl();
+		BowlingGamePlayerScore bowlingGamePlayerScore = new BowlingGamePlayerScore();
+		bowlingGamePlayerScore.setRolls(ROLLS_SAMPLE_GIVES_MORE_THAN_TEN_FRAMES_WITH_LAST_SPARE);
+		computeScoreImpl.compute(bowlingGamePlayerScore);
+		assertThat(bowlingGamePlayerScore.getStatusMessage(), equalTo(InvalidScoreOrIncorrectFormatException.INVALID_SCORE_VALUE_OR_INCORRECT_FORMAT));
+	}
+	
+	@Test
+	void testWhenThereAreLessThanTenFrames_TheSetStatusMessageInvalid() {
 		ComputeScoreImpl computeScoreImpl = new ComputeScoreImpl();
 		BowlingGamePlayerScore bowlingGamePlayerScore = new BowlingGamePlayerScore();
 		bowlingGamePlayerScore.setRolls(ROLLS_SAMPLE_INCOMPLETE_FRAMES_GAME);

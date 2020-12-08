@@ -36,10 +36,10 @@ public class ComputeScoreImpl implements ComputeScore, BowlingConstantes {
 						currentFrame.setThirdRoll(rolls.get(indexCurrentRoll + 2));	
 						ifThereAreMoreThanThreeRollsInTheLastFrameWithStrikeOrSpareThrowException(rolls, indexCurrentRoll);
 					} else {
-						currentFrame.setFirstRoll(knockedPins.toString());
+						currentFrame.setFirstRoll(rolls.get(indexCurrentRoll));
 						computeSecondRoll(rolls, indexCurrentRoll + 1, currentFrame);
 						if(currentFrame.getSecondRoll() != null && currentFrame.getSecondRoll().equals(SPARE_MARK)) {
-							currentFrame.setThirdRoll(getNextRoll(rolls, indexCurrentRoll + 1).toString());
+							currentFrame.setThirdRoll(rolls.get(indexCurrentRoll + 1));
 							ifThereAreMoreThanThreeRollsInTheLastFrameWithStrikeOrSpareThrowException(rolls, indexCurrentRoll);
 						}
 					}
@@ -55,7 +55,7 @@ public class ComputeScoreImpl implements ComputeScore, BowlingConstantes {
 					if(isFoulRoll(rolls, indexCurrentRoll, knockedPins)) {
 						currentFrame.setFirstRoll(FOUL_MARK);
 					} else {
-						currentFrame.setFirstRoll(knockedPins.toString());
+						currentFrame.setFirstRoll(rolls.get(indexCurrentRoll));
 					}
 					countRoll++;
 				} else if(isSecondRoll(countRoll) && countFrameGame != LAST_FRAME_PER_GAME_INDEX) {
@@ -113,7 +113,7 @@ public class ComputeScoreImpl implements ComputeScore, BowlingConstantes {
 			if(isFoulRoll(rolls, currentRollIndex, knockedPins)) {
 				currentFrame.setSecondRoll(FOUL_MARK);
 			} else {
-				currentFrame.setSecondRoll(knockedPins.toString());
+				currentFrame.setSecondRoll(rolls.get(currentRollIndex));
 			}
 			currentFrame.setScore(sumFirstSecondRoll);
 		}

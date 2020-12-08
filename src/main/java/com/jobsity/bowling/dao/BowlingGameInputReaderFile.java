@@ -9,12 +9,12 @@ import java.util.List;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
+import static com.jobsity.bowling.util.BowlingConstantes.*;
 
 @Scope("prototype")
 @Service
 public class BowlingGameInputReaderFile implements BowlingGameInputReader {
 
-	private static final String TAB_SEPARATOR = "\t";
 	private String filePath;
 	
 	public BowlingGameInputReaderFile(String filePath) {

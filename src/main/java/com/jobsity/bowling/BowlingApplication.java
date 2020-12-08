@@ -15,9 +15,13 @@ public class BowlingApplication {
 	public static void main(String[] args) {
 		ConfigurableApplicationContext ctx = SpringApplication.run(BowlingApplication.class, args);
 		BowlingGameService bowlingGameService = (BowlingGameService) ctx.getBean("bowlingGameServiceImpl");
-		BowlingGameInputReaderFile bowlingGameInputReaderFile = new BowlingGameInputReaderFile(args[0]);
-		BowlingScore bowlingScore = bowlingGameService.processScore(bowlingGameInputReaderFile);
-		BowlingScoreStandardOutputFormatter.format(bowlingScore);
+		System.out.println(execute(bowlingGameService, args[0]));
 	}
 
+	public static String execute(BowlingGameService bowlingGameService, String inputFilePath) {
+		BowlingGameInputReaderFile bowlingGameInputReaderFile = new BowlingGameInputReaderFile(inputFilePath);
+		BowlingScore bowlingScore = bowlingGameService.processScore(bowlingGameInputReaderFile);
+		String output = BowlingScoreStandardOutputFormatter.format(bowlingScore);
+		return output;
+	}
 }

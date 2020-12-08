@@ -43,13 +43,13 @@ class BowlingGameServiceImplTestIT {
 	}
 
 	@Test
-	void testProcessScore() {
+	void testProcessScore_WhenGamePerfectResult_ShouldScore300() {
 		Mockito.when(bowlingGameInputReader.read()).thenReturn(mockInputListPerfectGameByBob);
 		BowlingScore score = bowlingGameServiceImpl.processScore(bowlingGameInputReader);
 		BowlingGamePlayerScore playerScore = score.get(PLAYER_BOB);
 		assertThat(playerScore, is(not(nullValue())));
 		Frame lastFrame = playerScore.getGameFrames().get(LAST_FRAME_PER_GAME_INDEX);
-		assertThat(lastFrame.getScore(), equalTo(MAX_TOTAL_SCORE));
+		assertThat("Max score 300", lastFrame.getScore(), equalTo(MAX_TOTAL_SCORE));
 	}
 
 }

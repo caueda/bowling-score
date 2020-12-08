@@ -21,7 +21,6 @@ public class PinfallStandardOutputFormatter {
 			}
 			formatter.append(BREAK_LINE_MARK);
 		}
-		System.out.print(formatter.toString());
 		return formatter.toString();
 	}
 }

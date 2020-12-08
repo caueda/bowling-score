@@ -1,7 +1,7 @@
 package com.jobsity.bowling.dao;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.Matchers.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,9 +24,17 @@ class BowlingGameInputReaderFileTest {
 	}
 	
 	@Test
-	void parseReturnedLinesBreakingByTabCharacter_fileDoesNotExist_ThrowIllegalArgumentException() {
+	void parseReturnedLinesBreakingByTabCharacter_fileContains4Tabs_ShouldCreateListSize5() {
 		BowlingGameInputReaderFile reader = new BowlingGameInputReaderFile(TEST_CASES_INPUT01_TXT);
 		assertThat("Number of rows separated by tabs from a line", 
-				reader.parseReturnedLinesBreakingByTabCharacter(MOCK_LIST_RETURNED_AFTER_READING_THE_INPUT_FILE).size(), equalTo(MOCK_STRING_CONTAINS_5_ROWS));
+				reader.parseReturnedLinesBreakingByTabCharacter(MOCK_LIST_RETURNED_AFTER_READING_THE_INPUT_FILE), 
+				hasSize(MOCK_STRING_CONTAINS_5_ROWS));
+	}
+	
+	@Test
+	void parseReturnedLinesBreakingByTabCharacter_WhenListIsNull_ThenReturnEmptyList() {
+		BowlingGameInputReaderFile reader = new BowlingGameInputReaderFile(TEST_CASES_INPUT01_TXT);
+		assertThat("Number of rows separated by tabs from a line", 
+				reader.parseReturnedLinesBreakingByTabCharacter(null), empty());
 	}
 }
